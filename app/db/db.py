@@ -16,9 +16,16 @@ async_session_maker = sessionmaker(
     expire_on_commit=False,
 )
 
-async def get_user_db(session: AsyncSession = Depends(async_session_maker)):
+# ✅ Create safe session dependency
+async def get_async_session() -> AsyncSession:
+    async with async_session_maker() as session:
+        yield session
+
+# ✅ Fix dependency usage
+async def get_user_db(session: AsyncSession = Depends(get_async_session)):
     from app.models.user import User
     yield SQLAlchemyUserDatabase(session, User)
+
 
 
 
