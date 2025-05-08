@@ -12,16 +12,21 @@ class UserManager(UUIDIDMixin, BaseUserManager[User, str]):
     verification_token_secret = SECRET
 
     async def create(
-        self,
-        user_create: UserCreate,
-        safe: bool = False,
-        request: Optional[object] = None,
+            self,
+            user_create: UserCreate,
+            safe: bool = False,
+            request: Optional[object] = None,
     ) -> User:
-        # Create user dict and pass all fields to User model
         user_dict = user_create.dict()
+        password = user_dict.pop("password")
+
+        hashed_password = self.password_helper.hash(password)
+        user_dict["hashed_password"] = hashed_password
+
         created_user = User(**user_dict)
         self.user_db.session.add(created_user)
         await self.user_db.session.commit()
         await self.user_db.session.refresh(created_user)
         return created_user
+
 
