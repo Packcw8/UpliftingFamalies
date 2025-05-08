@@ -3,7 +3,7 @@ from fastapi_users.db import SQLAlchemyUserDatabase
 from app.models.user import User
 from app.db.db import async_session_maker
 from app.db.db import get_user_db
- # Make sure get_user_db is defined
+
 
 from app.auth.user_manager import UserManager  # ✅ Assuming this exists
 
