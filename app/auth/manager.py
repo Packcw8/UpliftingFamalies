@@ -1,7 +1,12 @@
-from app import User
-from app import async_session_maker
+from fastapi import Depends
 from fastapi_users.db import SQLAlchemyUserDatabase
+from app.models.user import User
+from app.db.db import async_session_maker
+from app.db.db import get_user_db
+ # Make sure get_user_db is defined
 
-async def get_user_db():
-    async with async_session_maker() as session:
-        yield SQLAlchemyUserDatabase(User, session)
+from app.auth.user_manager import UserManager  # ✅ Assuming this exists
+
+async def get_user_manager(user_db: SQLAlchemyUserDatabase = Depends(get_user_db)):
+    yield UserManager(user_db)
+

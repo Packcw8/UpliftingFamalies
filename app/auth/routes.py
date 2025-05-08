@@ -2,9 +2,10 @@ from uuid import UUID
 from fastapi import APIRouter, Depends
 from fastapi_users import FastAPIUsers
 from fastapi_users.authentication import CookieTransport, AuthenticationBackend, JWTStrategy
+
 from app.models.user import User
 from app.auth.manager import get_user_manager
-from app import UserRead, UserCreate
+from app.schemas.user import UserRead, UserCreate  # ✅ Fix import path here
 
 cookie_transport = CookieTransport(cookie_name="uplifting_session", cookie_max_age=3600)
 
@@ -17,7 +18,7 @@ auth_backend = AuthenticationBackend(
     get_strategy=get_jwt_strategy,
 )
 
-fastapi_users = FastAPIUsers[User, UUID](  # ✅ Use UUID here
+fastapi_users = FastAPIUsers[User, UUID](
     get_user_manager,
     [auth_backend],
 )
