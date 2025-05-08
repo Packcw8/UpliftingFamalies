@@ -2,9 +2,8 @@ from uuid import UUID
 from fastapi import APIRouter, Depends
 from fastapi_users import FastAPIUsers
 from fastapi_users.authentication import CookieTransport, AuthenticationBackend, JWTStrategy
-
-from app import User
-from app import get_user_manager
+from app.models.user import User
+from app.auth.manager import get_user_manager
 from app import UserRead, UserCreate
 
 cookie_transport = CookieTransport(cookie_name="uplifting_session", cookie_max_age=3600)
